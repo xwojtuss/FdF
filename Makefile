@@ -12,11 +12,9 @@ LIBS = ${LIBFT} ${MINILIBX} -lm -lX11 -lXext
 
 NAME = fdf
 
-SRCS = main.c
+SRCS = main.c errors.c memory.c parsing.c files.c mlx.c render.c
 
 VALID_SCENES = ${wildcard scenes/*.rt}
-
-SRCS = main.c
 
 SRCS_FILES = $(addprefix srcs/, ${SRCS})
 
