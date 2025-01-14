@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   memory.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkornato <wkornato@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 21:31:41 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/12 22:22:14 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/14 22:49:15 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,28 @@ void	free_map(t_map_info *map)
 
 bool	alloc_map(t_map_info *map)
 {
+	int	i;
+	int	j;
+
 	map->map = (t_point **)ft_calloc(sizeof(t_point *), map->rows);
 	if (!map->map)
 		return (false);
-	for (int i = 0; i < map->rows; i++)
+	i = 0;
+	while (i < map->rows)
 	{
+		j = 0;
 		map->map[i] = (t_point *)ft_calloc(sizeof(t_point), map->cols);
 		if (!map->map[i])
 		{
-			for (int j = 0; j < i; j++)
+			while (j < i)
+			{
 				free(map->map[i]);
+				j++;
+			}
 			free(map->map);
 			return (false);
 		}
+		i++;
 	}
 	return (true);
 }
@@ -55,4 +64,7 @@ void	init_map(t_map_info *map)
 	map->screen.win = NULL;
 	map->screen.w_height = W_HEIGHT;
 	map->screen.w_width = W_WIDTH;
+	map->rotation.x = 0;
+	map->rotation.y = 0;
+	map->rotation.z = 0;
 }
