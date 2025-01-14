@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkornato <wkornato@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 21:39:14 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/12 22:02:08 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/14 23:10:52 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,14 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 
-void	my_mlx_pixel_put(t_image *data, int x, int y, int color)
+void	my_mlx_pixel_put(t_map_info *map, int x, int y, int color)
 {
 	char	*dst;
 
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+	if (x > map->screen.w_width || x < 0 || y > map->screen.w_height || y < 0)
+		return ;
+	dst = map->screen.img.addr + (y * map->screen.img.line_length + x
+			* (map->screen.img.bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
 }
 
@@ -58,10 +61,28 @@ int	key_hook(int keycode, t_map_info *map)
 		free_map(map);
 		exit(EXIT_SUCCESS);
 	}
-	// render scene again
+	else if (keycode == XK_d)
+		map->rotation.y += ROTATION_STEP;
+	else if (keycode == XK_a)
+		map->rotation.y -= ROTATION_STEP;
+	else if (keycode == XK_w)
+		map->rotation.x -= ROTATION_STEP; // Upward tilt
+	else if (keycode == XK_s)
+		map->rotation.x += ROTATION_STEP; // Downward tilt
+	else if (keycode == XK_q)
+		map->rotation.z -= ROTATION_STEP; // Counter-clockwise roll
+	else if (keycode == XK_e)
+		map->rotation.z += ROTATION_STEP;
+	else
+		return (EXIT_SUCCESS);
+	map->rotation.x = fmod(map->rotation.x + 360.0, 360.0);
+	map->rotation.y = fmod(map->rotation.y + 360.0, 360.0);
+	map->rotation.z = fmod(map->rotation.z + 360.0, 360.0);
+	ft_memset(map->screen.img.addr, '\0', W_HEIGHT
+		* map->screen.img.line_length);
+	render_image(map);
 	return (EXIT_SUCCESS);
 }
-
 
 void	init_mlx(t_map_info *map)
 {
@@ -81,6 +102,7 @@ void	init_mlx(t_map_info *map)
 			&map->screen.img.endian);
 	if (!map->screen.img.addr)
 		err_map("Could not get image address", map);
-	mlx_hook(map->screen.win, DestroyNotify, NoEventMask, close_win_handler, map);
+	mlx_hook(map->screen.win, DestroyNotify, NoEventMask, close_win_handler,
+		map);
 	mlx_hook(map->screen.win, KeyPress, KeyPressMask, key_hook, map);
 }

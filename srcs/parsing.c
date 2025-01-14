@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkornato <wkornato@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 21:31:43 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/12 22:48:18 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/14 21:16:35 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ static bool	load_row(t_map_info *map, int idx, int n, char *line)
 	{
 		if (!is_number(token))
 			return (false);
-		map->map[idx][i].x_pos = i * W_WIDTH / (map->cols - 1);
-		map->map[idx][i].y_pos = idx * W_HEIGHT / (map->rows - 1);
+		map->map[idx][i].x_pos = i * (float)GRID_SPACE_X / (map->cols - 1) + EMPTY_SPACE_X / 2;
+		map->map[idx][i].y_pos = idx * (float)GRID_SPACE_Y / (map->rows - 1) + EMPTY_SPACE_Y / 2;
 		map->map[idx][i].z_pos = ft_atoi(token);
 		i++;
 		token = ft_strtok_r(NULL, " ", &line);
