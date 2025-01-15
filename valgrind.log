@@ -1,18 +1,59 @@
-==107315== Memcheck, a memory error detector
-==107315== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==107315== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==107315== Command: ./fdf test
-==107315== Parent PID: 11782
-==107315== 
-==107315== 
-==107315== HEAP SUMMARY:
-==107315==     in use at exit: 0 bytes in 0 blocks
-==107315==   total heap usage: 493 allocs, 493 frees, 196,805 bytes allocated
-==107315== 
-==107315== All heap blocks were freed -- no leaks are possible
-==107315== 
-==107315== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 1 from 1)
---107315-- 
---107315-- used_suppression:      1 X on SUSE11 writev uninit padding /usr/libexec/valgrind/default.supp:377
-==107315== 
-==107315== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 1 from 1)
+==11613== Memcheck, a memory error detector
+==11613== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==11613== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==11613== Command: ./fdf maps/mars.fdf
+==11613== Parent PID: 3490
+==11613== 
+==11613== Syscall param writev(vector[0]) points to uninitialised byte(s)
+==11613==    at 0x4BD3864: writev (writev.c:26)
+==11613==    by 0x4CCAACA: ??? (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11613==    by 0x4CCAC4E: ??? (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11613==    by 0x4CCBD7E: xcb_writev (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11613==    by 0x499A0B8: _XSend (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11613==    by 0x499F148: _XReadEvents (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11613==    by 0x499F52B: XWindowEvent (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11613==    by 0x10DA75: mlx_int_wait_first_expose (in /home/wkornato/Documents/FdF/fdf)
+==11613==    by 0x10D7B5: mlx_new_window (in /home/wkornato/Documents/FdF/fdf)
+==11613==    by 0x10B39F: init_mlx (mlx.c:96)
+==11613==    by 0x10A898: main (main.c:31)
+==11613==  Address 0x4dfcc7c is 28 bytes inside a block of size 16,384 alloc'd
+==11613==    at 0x484D953: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==11613==    by 0x498942D: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11613==    by 0x10D566: mlx_init (in /home/wkornato/Documents/FdF/fdf)
+==11613==    by 0x10B37E: init_mlx (mlx.c:93)
+==11613==    by 0x10A898: main (main.c:31)
+==11613==  Uninitialised value was created by a stack allocation
+==11613==    at 0x10D980: mlx_int_anti_resize_win (in /home/wkornato/Documents/FdF/fdf)
+==11613== 
+==11613== 
+==11613== HEAP SUMMARY:
+==11613==     in use at exit: 0 bytes in 0 blocks
+==11613==   total heap usage: 573 allocs, 573 frees, 942,046 bytes allocated
+==11613== 
+==11613== All heap blocks were freed -- no leaks are possible
+==11613== 
+==11613== ERROR SUMMARY: 2 errors from 1 contexts (suppressed: 0 from 0)
+==11613== 
+==11613== 2 errors in context 1 of 1:
+==11613== Syscall param writev(vector[0]) points to uninitialised byte(s)
+==11613==    at 0x4BD3864: writev (writev.c:26)
+==11613==    by 0x4CCAACA: ??? (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11613==    by 0x4CCAC4E: ??? (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11613==    by 0x4CCBD7E: xcb_writev (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
+==11613==    by 0x499A0B8: _XSend (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11613==    by 0x499F148: _XReadEvents (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11613==    by 0x499F52B: XWindowEvent (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11613==    by 0x10DA75: mlx_int_wait_first_expose (in /home/wkornato/Documents/FdF/fdf)
+==11613==    by 0x10D7B5: mlx_new_window (in /home/wkornato/Documents/FdF/fdf)
+==11613==    by 0x10B39F: init_mlx (mlx.c:96)
+==11613==    by 0x10A898: main (main.c:31)
+==11613==  Address 0x4dfcc7c is 28 bytes inside a block of size 16,384 alloc'd
+==11613==    at 0x484D953: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==11613==    by 0x498942D: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
+==11613==    by 0x10D566: mlx_init (in /home/wkornato/Documents/FdF/fdf)
+==11613==    by 0x10B37E: init_mlx (mlx.c:93)
+==11613==    by 0x10A898: main (main.c:31)
+==11613==  Uninitialised value was created by a stack allocation
+==11613==    at 0x10D980: mlx_int_anti_resize_win (in /home/wkornato/Documents/FdF/fdf)
+==11613== 
+==11613== ERROR SUMMARY: 2 errors from 1 contexts (suppressed: 0 from 0)
