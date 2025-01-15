@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkornato <wkornato@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 21:31:43 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/15 11:51:30 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/15 15:11:53 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,27 +40,60 @@ static bool	is_number(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (!ft_isdigit(str[i]))
+		if (str[i] == ',' && i != 0)
+			return (true);
+		if (!ft_isdigit(str[i]) && str[i] != '-')
 			return (false);
 		i++;
 	}
 	return (true);
 }
 
+int	get_hex(char *str)
+{
+	int	result;
+	int	i;
+
+	result = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] >= '0' && str[i] <= '9')
+			result = (result << 4) | ((str[i] - '0') & 0xF);
+		else if (str[i] >= 'a' && str[i] <= 'f')
+			result = (result << 4) | ((str[i] - 'a' + 10) & 0xF);
+		else if (str[i] >= 'A' && str[i] <= 'F')
+			result = (result << 4) | ((str[i] - 'A' + 10) & 0xF);
+		i++;
+	}
+	return (result);
+}
+
 static bool	load_row(t_map_info *map, int idx, int n, char *line)
 {
 	char	*token;
+	char	*inner_token;
+	char	*inner_saveptr;
 	int		i;
 
 	i = 0;
+	inner_saveptr = NULL;
 	token = ft_strtok_r(line, " ", &line);
 	while (token && i < n)
 	{
-		if (!is_number(token))
+		inner_token = ft_strtok_r(token, ",", &inner_saveptr);
+		if (!is_number(inner_token))
 			return (false);
+		map->map[idx][i].z_pos = ft_atoi(inner_token) * 5;
 		map->map[idx][i].x_pos = i;
 		map->map[idx][i].y_pos = idx;
-		map->map[idx][i].z_pos = ft_atoi(token);
+		inner_token = ft_strtok_r(NULL, ",", &inner_saveptr);
+		if (inner_token)
+			map->map[idx][i].color = get_hex(inner_token);
+		else
+			map->map[idx][i].color = 0xffffff;
+		if (map->map[idx][i].color == NOT_SET)
+			return (false);
 		i++;
 		token = ft_strtok_r(NULL, " ", &line);
 	}
