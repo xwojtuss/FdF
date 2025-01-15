@@ -6,7 +6,7 @@
 /*   By: wkornato <wkornato@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 21:39:14 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/15 11:33:44 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/15 12:20:48 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,10 @@ int	key_hook(int keycode, t_map_info *map)
 		map->rotation.z -= ROTATION_STEP; // Counter-clockwise roll
 	else if (keycode == XK_e)
 		map->rotation.z += ROTATION_STEP;
+	else if (keycode == XK_equal)
+		map->scale++;
+	else if (keycode == XK_minus && (float)GRID_SPACE_X + map->scale * (float)GRID_SPACE_X/ZOOM_FACTOR > 1)
+		map->scale--;
 	else
 		return (EXIT_SUCCESS);
 	map->rotation.x = fmod(map->rotation.x + 360.0, 360.0);

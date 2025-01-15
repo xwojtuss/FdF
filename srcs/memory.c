@@ -6,7 +6,7 @@
 /*   By: wkornato <wkornato@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 21:31:41 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/15 11:31:33 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/15 11:49:40 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,12 @@ void	init_map(t_map_info *map)
 	map->screen.win = NULL;
 	map->screen.w_height = W_HEIGHT;
 	map->screen.w_width = W_WIDTH;
-	map->height_factor = 100;
+	map->height_factor = 10;
+	map->scale = 0;
 	map->rotation.x = 0;
 	map->rotation.y = 0;
 	map->rotation.z = 0;
+	map->translation.x = 0;
+	map->translation.y = 0;
+	map->translation.z = 0;
 }

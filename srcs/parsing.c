@@ -6,7 +6,7 @@
 /*   By: wkornato <wkornato@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 21:31:43 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/15 11:30:31 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/15 11:51:30 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ static bool	load_row(t_map_info *map, int idx, int n, char *line)
 	{
 		if (!is_number(token))
 			return (false);
-		map->map[idx][i].x_pos = i * (float)GRID_SPACE_X / (map->cols - 1) + EMPTY_SPACE_X / 2 - W_WIDTH / 2;
-		map->map[idx][i].y_pos = idx * (float)GRID_SPACE_Y / (map->rows - 1) + EMPTY_SPACE_Y / 2 - W_HEIGHT / 2;
+		map->map[idx][i].x_pos = i;
+		map->map[idx][i].y_pos = idx;
 		map->map[idx][i].z_pos = ft_atoi(token);
 		i++;
 		token = ft_strtok_r(NULL, " ", &line);

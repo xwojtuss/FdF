@@ -6,7 +6,7 @@
 /*   By: wkornato <wkornato@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 16:43:11 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/15 11:29:25 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/15 12:18:44 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 #  define M_PI 3.141592653589793
 # endif
 
-# define HEIGHT_MULTIPLIER 10
+# define ZOOM_FACTOR 20
 # define ROTATION_STEP 5
 
 # define NOT_SET -42
