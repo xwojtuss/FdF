@@ -2,6 +2,7 @@
 	"files.associations": {
 		"fdf.h": "c",
 		"mlx.h": "c",
-		"cmath": "cpp"
+		"cmath": "cpp",
+		"cstddef": "c"
 	}
 }
