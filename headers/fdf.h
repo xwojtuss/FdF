@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wkornato <wkornato@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 16:43:11 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/14 23:09:34 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/15 11:29:25 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 #  define M_PI 3.141592653589793
 # endif
 
+# define HEIGHT_MULTIPLIER 10
 # define ROTATION_STEP 5
 
 # define NOT_SET -42
@@ -65,9 +66,10 @@ typedef struct s_map_info
 {
 	t_mlx	screen;
 	t_point	**map;
-	t_v3	rotation;
-	t_v3	scale;
-	t_v3	translation;
+	t_v3i	rotation;
+	t_v3i	translation;
+	int		scale;
+	int		height_factor;
 	int		cols;
 	int		rows;
 }			t_map_info;

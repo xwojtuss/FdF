@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   memory.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wkornato <wkornato@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 21:31:41 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/14 22:49:15 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/15 11:31:33 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	init_map(t_map_info *map)
 	map->screen.win = NULL;
 	map->screen.w_height = W_HEIGHT;
 	map->screen.w_width = W_WIDTH;
+	map->height_factor = 100;
 	map->rotation.x = 0;
 	map->rotation.y = 0;
 	map->rotation.z = 0;
