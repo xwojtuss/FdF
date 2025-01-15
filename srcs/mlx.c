@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wkornato <wkornato@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 21:39:14 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/14 23:10:52 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/15 11:33:44 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	my_mlx_pixel_put(t_map_info *map, int x, int y, int color)
 {
 	char	*dst;
 
-	if (x > map->screen.w_width || x < 0 || y > map->screen.w_height || y < 0)
+	if (x >= map->screen.w_width || x < 0 || y > map->screen.w_height || y < 0)
 		return ;
 	dst = map->screen.img.addr + (y * map->screen.img.line_length + x
 			* (map->screen.img.bits_per_pixel / 8));

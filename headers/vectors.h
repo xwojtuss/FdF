@@ -3,22 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   vectors.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wkornato <wkornato@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 22:52:04 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/14 22:39:59 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/15 11:29:37 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTORS_H
 # define VECTORS_H
 
-typedef	struct s_v3
+typedef	struct s_v3i
 {
-	float	x;
-	float	y;
-	float	z;
-	int		padding;//padding for casting
-}			t_v3;
+	int		x;
+	int		y;
+	int		z;
+}			t_v3i;
 
 #endif

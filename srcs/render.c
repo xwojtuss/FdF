@@ -3,61 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wkornato <wkornato@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 22:04:02 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/14 23:11:01 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/15 11:34:27 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "mlx.h"
 #include "vectors.h"
-
-t_v3	calculate_isometric(t_v3 *vec, t_map_info *map)
-{
-	t_v3	result;
-
-	(void)map;
-	result.x = vec->x;
-	result.y = vec->y;
-	result.z = vec->z;
-	return (result);
-}
-
-void	draw_line(t_point *p0, t_point *p1, t_map_info *map)
-{
-	int	dx;
-	int	sx;
-	int	dy;
-	int	sy;
-	int	error;
-	int	e2;
-
-	dx = abs((int)p1->x_pos - (int)p0->x_pos);
-	sx = ((int)p0->x_pos < (int)p1->x_pos) * 2 - 1;
-	dy = -abs((int)p1->y_pos - (int)p0->y_pos);
-	sy = ((int)p0->y_pos < (int)p1->y_pos) * 2 - 1;
-	error = dx + dy;
-	while (true)
-	{
-		my_mlx_pixel_put(map, (int)p0->x_pos, (int)p0->y_pos, 0xffffff);
-		if ((int)p0->x_pos == (int)p1->x_pos
-			&& (int)p0->y_pos == (int)p1->y_pos)
-			break ;
-		e2 = 2 * error;
-		if (e2 >= dy)
-		{
-			error = error + dy;
-			p0->x_pos = (int)p0->x_pos + sx;
-		}
-		if (e2 <= dx)
-		{
-			error = error + dx;
-			p0->y_pos = (int)p0->y_pos + sy;
-		}
-	}
-}
 
 void	calculate_point(t_point *p, t_map_info *map, t_point og)
 {
@@ -86,6 +41,44 @@ void	calculate_point(t_point *p, t_map_info *map, t_point og)
 	p->z_pos = og.z_pos;
 }
 
+void	draw_line(t_point p0, t_point p1, t_map_info *map)
+{
+	t_point	point0;
+	t_point	point1;
+	int	dx;
+	int	sx;
+	int	dy;
+	int	sy;
+	int	error;
+	int	e2;
+
+	calculate_point(&point0, map, p0);
+	calculate_point(&point1, map, p1);
+	dx = abs((int)point1.x_pos - (int)point0.x_pos);
+	sx = ((int)point0.x_pos < (int)point1.x_pos) * 2 - 1;
+	dy = -abs((int)point1.y_pos - (int)point0.y_pos);
+	sy = ((int)point0.y_pos < (int)point1.y_pos) * 2 - 1;
+	error = dx + dy;
+	while (true)
+	{
+		my_mlx_pixel_put(map, (int)point0.x_pos + W_WIDTH / 2, (int)point0.y_pos + W_HEIGHT / 2, 0xffffff);
+		if ((int)point0.x_pos == (int)point1.x_pos
+			&& (int)point0.y_pos == (int)point1.y_pos)
+			break ;
+		e2 = 2 * error;
+		if (e2 >= dy)
+		{
+			error = error + dy;
+			point0.x_pos = (int)point0.x_pos + sx;
+		}
+		if (e2 <= dx)
+		{
+			error = error + dx;
+			point0.y_pos = (int)point0.y_pos + sy;
+		}
+	}
+}
+
 void	render_image(t_map_info *map)
 {
 	short	y;
@@ -102,17 +95,11 @@ void	render_image(t_map_info *map)
 			(void)curr;
 			copy_point(map->map[y][x], &curr);
 			calculate_point(&curr, map, map->map[y][x]);
-			if (curr.z_pos == 0)
-				my_mlx_pixel_put(map, curr.x_pos, curr.y_pos, 0xffffff);
-			else if (curr.z_pos == 10)
-				my_mlx_pixel_put(map, curr.x_pos, curr.y_pos, 0xff0000);
-			copy_point(curr, &map->map[y][x]);
+			my_mlx_pixel_put(map, curr.x_pos + W_WIDTH / 2, curr.y_pos + W_HEIGHT / 2, 0xffffff);
 			if (x != 0)
-				draw_line(&map->map[y][x], &map->map[y][x - 1], map);
-			copy_point(curr, &map->map[y][x]);
+				draw_line(map->map[y][x], map->map[y][x - 1], map);
 			if (y != 0)
-				draw_line(&map->map[y][x], &map->map[y - 1][x], map);
-			copy_point(curr, &map->map[y][x]);
+				draw_line(map->map[y][x], map->map[y - 1][x], map);
 			x++;
 		}
 		y++;
