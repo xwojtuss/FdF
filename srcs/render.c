@@ -6,7 +6,7 @@
 /*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 22:04:02 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/15 15:30:11 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/16 21:42:52 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,29 +20,29 @@ void	calculate_point(t_point *p, t_map_info *map, t_point og)
 	float	rad_y;
 	float	rad_z;
 	t_point	temp;
-
-	og.x_pos = og.x_pos * ((float)GRID_SPACE_X + map->scale
-			* (float)GRID_SPACE_X / ZOOM_FACTOR) / (map->cols - 1)
-		+ EMPTY_SPACE_X / 2 - W_WIDTH / 2 - map->scale * (float)GRID_SPACE_X
-		/ (ZOOM_FACTOR * 2);
-	og.y_pos = og.y_pos * ((float)GRID_SPACE_Y + map->scale
-			* (float)GRID_SPACE_Y / ZOOM_FACTOR) / (map->rows - 1)
-		+ EMPTY_SPACE_Y / 2 - W_HEIGHT / 2 - map->scale * (float)GRID_SPACE_Y
-		/ (ZOOM_FACTOR * 2);
-	og.z_pos = og.z_pos * map->height_factor;
+	
+	if (map->cols > map->rows)
+		map->scale = W_HEIGHT / (map->cols * 40.0f + 40.0f);
+	else
+		map->scale = W_HEIGHT / (map->rows * 40.0f + 40.0f);
+	og.x_pos = (og.x_pos - map->cols / 2) * map->scale;
+	og.y_pos = (og.y_pos - map->rows / 2) * map->scale;
+	og.x_pos = og.x_pos * 40;
+	og.y_pos = og.y_pos * 40;
+	og.z_pos = og.z_pos * ((float)map->height_factor * HEIGHT_STEP) * (2 + map->scale * 3);
 	rad_x = (int)map->rotation.x * M_PI / 180.0;
 	rad_y = (int)map->rotation.y * M_PI / 180.0;
 	rad_z = (int)map->rotation.z * M_PI / 180.0;
 	temp.y_pos = og.y_pos * cos(rad_x) - og.z_pos * sin(rad_x);
 	temp.z_pos = og.y_pos * sin(rad_x) + og.z_pos * cos(rad_x);
-	copy_point((t_point){og.x_pos, temp.y_pos, temp.z_pos, og.color}, &og);
-	temp.x_pos = og.x_pos * cos(rad_y) + og.z_pos * sin(rad_y);
-	temp.z_pos = -og.x_pos * sin(rad_y) + og.z_pos * cos(rad_y);
-	copy_point((t_point){temp.x_pos, og.y_pos, temp.z_pos, og.color}, &og);
+	temp.x_pos = og.x_pos;
+	og.x_pos = temp.x_pos * cos(rad_y) + temp.z_pos * sin(rad_y);
+	og.z_pos = -temp.x_pos * sin(rad_y) + temp.z_pos * cos(rad_y);
+	og.y_pos = temp.y_pos;
 	temp.x_pos = og.x_pos * cos(rad_z) - og.y_pos * sin(rad_z);
 	temp.y_pos = og.x_pos * sin(rad_z) + og.y_pos * cos(rad_z);
-	copy_point((t_point){temp.x_pos, temp.y_pos, og.z_pos, og.color}, &og);
-	copy_point(og, p);
+	temp.z_pos = og.z_pos;
+	copy_point((t_point){temp.x_pos, temp.y_pos, temp.z_pos, og.color}, p);
 }
 
 void	draw_line(t_point p0, t_point p1, t_map_info *map)
@@ -70,10 +70,14 @@ void	draw_line(t_point p0, t_point p1, t_map_info *map)
 	iter = 0;
 	while (true)
 	{
-		if (p0.color > p1.color)
-			color = (((1-iter/line_length)*((p0.color >> 16) & 0xFF) + iter/line_length * (p0.color >> 16)) << 16)|(((1-iter/line_length)*((p0.color >> 8) & 0xFF) + iter/line_length * (p0.color >> 8)) << 8)|(((1-iter/line_length)*((p0.color) & 0xFF) + iter/line_length * (p0.color)));
-		else
-			color = (((1-iter/line_length)*((p1.color >> 16) & 0xFF) + iter/line_length * (p1.color >> 16)) << 16)|(((1-iter/line_length)*((p1.color >> 8) & 0xFF) + iter/line_length * (p1.color >> 8)) << 8)|(((1-iter/line_length)*((p1.color) & 0xFF) + iter/line_length * (p1.color)));
+		color = ((int)((1 - (float)iter / line_length)
+					* ((p0.color >> 16) & 0xFF) + ((float)iter / line_length)
+					* ((p1.color >> 16) & 0xFF)) << 16) | ((int)((1
+						- (float)iter / line_length) * ((p0.color >> 8) & 0xFF)
+					+ ((float)iter / line_length)
+					* ((p1.color >> 8) & 0xFF)) << 8) | (int)((((1 - (float)iter
+							/ line_length) * (p0.color & 0xFF)) + ((float)iter
+						/ line_length) * (p1.color & 0xFF)));
 		my_mlx_pixel_put(map, (int)point0.x_pos + W_WIDTH / 2, (int)point0.y_pos
 			+ W_HEIGHT / 2, color);
 		if ((int)point0.x_pos == (int)point1.x_pos
@@ -99,7 +103,7 @@ void	render_image(t_map_info *map)
 	short	y;
 	short	x;
 	t_point	curr;
-	
+
 	y = 0;
 	while (y < map->rows)
 	{
@@ -109,8 +113,8 @@ void	render_image(t_map_info *map)
 			(void)curr;
 			copy_point(map->map[y][x], &curr);
 			calculate_point(&curr, map, map->map[y][x]);
-			my_mlx_pixel_put(map, curr.x_pos + W_WIDTH / 2, curr.y_pos
-				+ W_HEIGHT / 2, curr.color);
+			if (!map->is_color && map->max_height != map->min_height)
+				map->map[y][x].color = 0xffffff * (1 - ((float)(map->map[y][x].z_pos - map->min_height)/(map->max_height - map->min_height) / 2) + 0.5);
 			if (x != 0)
 				draw_line(map->map[y][x], map->map[y][x - 1], map);
 			if (y != 0)

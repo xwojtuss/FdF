@@ -6,7 +6,7 @@
 /*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 21:39:14 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/15 15:14:45 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:52:00 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,22 +66,23 @@ int	key_hook(int keycode, t_map_info *map)
 	else if (keycode == XK_a)
 		map->rotation.y -= ROTATION_STEP;
 	else if (keycode == XK_w)
-		map->rotation.x -= ROTATION_STEP; // Upward tilt
+		map->rotation.x -= ROTATION_STEP;
 	else if (keycode == XK_s)
-		map->rotation.x += ROTATION_STEP; // Downward tilt
+		map->rotation.x += ROTATION_STEP;
 	else if (keycode == XK_q)
-		map->rotation.z -= ROTATION_STEP; // Counter-clockwise roll
+		map->rotation.z -= ROTATION_STEP;
 	else if (keycode == XK_e)
 		map->rotation.z += ROTATION_STEP;
 	else if (keycode == XK_equal)
 		map->scale++;
 	else if (keycode == XK_minus && (float)GRID_SPACE_X + map->scale * (float)GRID_SPACE_X/ZOOM_FACTOR > 1)
 		map->scale--;
+	else if (keycode == XK_0)
+		map->height_factor++;
+	else if (keycode == XK_9)
+		map->height_factor--;
 	else
 		return (EXIT_SUCCESS);
-	map->rotation.x = fmod(map->rotation.x + 360.0, 360.0);
-	map->rotation.y = fmod(map->rotation.y + 360.0, 360.0);
-	map->rotation.z = fmod(map->rotation.z + 360.0, 360.0);
 	ft_memset(map->screen.img.addr, '\0', W_HEIGHT
 		* map->screen.img.line_length);
 	render_image(map);

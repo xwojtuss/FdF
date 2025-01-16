@@ -14,7 +14,7 @@ NAME = fdf
 
 SRCS = main.c errors.c memory.c parsing.c files.c mlx.c render.c debug.c
 
-VALID_SCENES = ${wildcard scenes/*.rt}
+MAPS = ${wildcard maps/*.fdf}
 
 SRCS_FILES = $(addprefix srcs/, ${SRCS})
 
@@ -57,8 +57,8 @@ fclean:
 	rm -dfr libs/libft
 
 test: all
-	@$(foreach SCENE, ${VALID_SCENES}, \
-		clear && cat ${SCENE} && ./${NAME} ${SCENE};)
+	@$(foreach MAP, ${MAPS}, \
+		clear && cat ${MAP} && ./${NAME} ${MAP};)
 
 re: fclean all
 

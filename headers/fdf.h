@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkornato <wkornato@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 16:43:11 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/15 12:18:44 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/16 21:38:05 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 
 # define ZOOM_FACTOR 20
 # define ROTATION_STEP 5
+# define HEIGHT_STEP 0.1
 
 # define NOT_SET -42
 
@@ -68,10 +69,13 @@ typedef struct s_map_info
 	t_point	**map;
 	t_v3i	rotation;
 	t_v3i	translation;
-	int		scale;
+	float	scale;
 	int		height_factor;
 	int		cols;
 	int		rows;
+	int		min_height;
+	int		max_height;
+	bool	is_color;
 }			t_map_info;
 
 //	SRCS

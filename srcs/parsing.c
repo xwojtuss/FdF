@@ -6,7 +6,7 @@
 /*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 21:31:43 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/15 15:11:53 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/16 21:31:08 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,19 @@ static bool	load_row(t_map_info *map, int idx, int n, char *line)
 		inner_token = ft_strtok_r(token, ",", &inner_saveptr);
 		if (!is_number(inner_token))
 			return (false);
-		map->map[idx][i].z_pos = ft_atoi(inner_token) * 5;
+		map->map[idx][i].z_pos = ft_atoi(inner_token);
 		map->map[idx][i].x_pos = i;
 		map->map[idx][i].y_pos = idx;
+		if (map->map[idx][i].z_pos > map->max_height)
+			map->max_height = (int)map->map[idx][i].z_pos;
+		if (map->map[idx][i].z_pos < map->min_height)
+			map->min_height = (int)map->map[idx][i].z_pos;
 		inner_token = ft_strtok_r(NULL, ",", &inner_saveptr);
 		if (inner_token)
+		{
 			map->map[idx][i].color = get_hex(inner_token);
+			map->is_color = true;
+		}
 		else
 			map->map[idx][i].color = 0xffffff;
 		if (map->map[idx][i].color == NOT_SET)
