@@ -6,7 +6,7 @@
 /*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 22:04:02 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/16 21:42:52 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:25:31 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,8 @@ void	calculate_point(t_point *p, t_map_info *map, t_point og)
 	float	rad_z;
 	t_point	temp;
 	
-	if (map->cols > map->rows)
-		map->scale = W_HEIGHT / (map->cols * 40.0f + 40.0f);
-	else
-		map->scale = W_HEIGHT / (map->rows * 40.0f + 40.0f);
-	og.x_pos = (og.x_pos - map->cols / 2) * map->scale;
-	og.y_pos = (og.y_pos - map->rows / 2) * map->scale;
-	og.x_pos = og.x_pos * 40;
-	og.y_pos = og.y_pos * 40;
+	og.x_pos = (og.x_pos - map->cols / 2) * map->scale * 40;
+	og.y_pos = (og.y_pos - map->rows / 2) * map->scale * 40;
 	og.z_pos = og.z_pos * ((float)map->height_factor * HEIGHT_STEP) * (2 + map->scale * 3);
 	rad_x = (int)map->rotation.x * M_PI / 180.0;
 	rad_y = (int)map->rotation.y * M_PI / 180.0;
@@ -78,8 +72,8 @@ void	draw_line(t_point p0, t_point p1, t_map_info *map)
 					* ((p1.color >> 8) & 0xFF)) << 8) | (int)((((1 - (float)iter
 							/ line_length) * (p0.color & 0xFF)) + ((float)iter
 						/ line_length) * (p1.color & 0xFF)));
-		my_mlx_pixel_put(map, (int)point0.x_pos + W_WIDTH / 2, (int)point0.y_pos
-			+ W_HEIGHT / 2, color);
+		my_mlx_pixel_put(map, (int)point0.x_pos + W_WIDTH / 2 + map->translation.x, (int)point0.y_pos
+			+ W_HEIGHT / 2 + map->translation.y, color);
 		if ((int)point0.x_pos == (int)point1.x_pos
 			&& (int)point0.y_pos == (int)point1.y_pos)
 			break ;
@@ -98,17 +92,17 @@ void	draw_line(t_point p0, t_point p1, t_map_info *map)
 	}
 }
 
-void	render_image(t_map_info *map)
+void	render_normal(t_map_info *map)
 {
 	short	y;
 	short	x;
 	t_point	curr;
 
-	y = 0;
-	while (y < map->rows)
+	x = 0;
+	while (x < map->cols)
 	{
-		x = 0;
-		while (x < map->cols)
+		y = 0;
+		while (y < map->rows)
 		{
 			(void)curr;
 			copy_point(map->map[y][x], &curr);
@@ -119,10 +113,51 @@ void	render_image(t_map_info *map)
 				draw_line(map->map[y][x], map->map[y][x - 1], map);
 			if (y != 0)
 				draw_line(map->map[y][x], map->map[y - 1][x], map);
-			x++;
+			y++;
 		}
-		y++;
+		x++;
 	}
 	mlx_put_image_to_window(map->screen.mlx, map->screen.win,
 		map->screen.img.img, 0, 0);
+}
+
+void	render_reverse(t_map_info *map)
+{
+	short	y;
+	short	x;
+	t_point	curr;
+
+	x = map->cols - 1;
+	while (x >= 0)
+	{
+		y = map->rows - 1;
+		while (y >= 0)
+		{
+			(void)curr;
+			copy_point(map->map[y][x], &curr);
+			calculate_point(&curr, map, map->map[y][x]);
+			if (!map->is_color && map->max_height != map->min_height)
+				map->map[y][x].color = 0xffffff * (1 - ((float)(map->map[y][x].z_pos - map->min_height)/(map->max_height - map->min_height) / 2) + 0.5);
+			if (x != 0)
+				draw_line(map->map[y][x], map->map[y][x - 1], map);
+			if (y != 0)
+				draw_line(map->map[y][x], map->map[y - 1][x], map);
+			y--;
+		}
+		x--;
+	}
+	mlx_put_image_to_window(map->screen.mlx, map->screen.win,
+		map->screen.img.img, 0, 0);
+}
+
+void	render_image(t_map_info *map)
+{
+	if (map->cols > map->rows)
+		map->scale = W_HEIGHT / (map->cols * 40.0f + 40.0f) * (1 + (float)map->scale_factor / 50);
+	else
+		map->scale = W_HEIGHT / (map->rows * 40.0f + 40.0f) * (1 + (float)map->scale_factor / 50);
+	if ((map->rotation.y < 0 && map->rotation.y > -90) || (map->rotation.y > 180 && map->rotation.y < 360))
+		render_normal(map);
+	else
+		render_reverse(map);
 }

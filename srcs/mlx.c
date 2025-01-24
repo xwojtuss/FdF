@@ -6,7 +6,7 @@
 /*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 21:39:14 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/16 13:52:00 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:22:42 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,22 @@ int	close_win_handler(void *context)
 	return (0);
 }
 
+void	clamp_rotation(t_map_info *map)
+{
+	if (map->rotation.x >= 360)
+		map->rotation.x -= 360;
+	else if (map->rotation.x < 0)
+		map->rotation.x += 360;
+	if (map->rotation.y >= 360)
+		map->rotation.y -= 360;
+	else if (map->rotation.y < 0)
+		map->rotation.y += 360;
+	if (map->rotation.z >= 360)
+		map->rotation.z -= 360;
+	else if (map->rotation.z < 0)
+		map->rotation.z += 360;
+}
+
 int	key_hook(int keycode, t_map_info *map)
 {
 	if (keycode == XK_Escape)
@@ -74,17 +90,26 @@ int	key_hook(int keycode, t_map_info *map)
 	else if (keycode == XK_e)
 		map->rotation.z += ROTATION_STEP;
 	else if (keycode == XK_equal)
-		map->scale++;
+		map->scale_factor++;
 	else if (keycode == XK_minus && (float)GRID_SPACE_X + map->scale * (float)GRID_SPACE_X/ZOOM_FACTOR > 1)
-		map->scale--;
+		map->scale_factor--;
 	else if (keycode == XK_0)
 		map->height_factor++;
 	else if (keycode == XK_9)
 		map->height_factor--;
+	else if (keycode == XK_Right)
+		map->translation.x += TRANSLATION_STEP;
+	else if (keycode == XK_Left)
+		map->translation.x -= TRANSLATION_STEP;
+	else if (keycode == XK_Up)
+		map->translation.y -= TRANSLATION_STEP;
+	else if (keycode == XK_Down)
+		map->translation.y += TRANSLATION_STEP;
 	else
 		return (EXIT_SUCCESS);
 	ft_memset(map->screen.img.addr, '\0', W_HEIGHT
 		* map->screen.img.line_length);
+	clamp_rotation(map);
 	render_image(map);
 	return (EXIT_SUCCESS);
 }
