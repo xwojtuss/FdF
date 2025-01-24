@@ -6,7 +6,7 @@
 /*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 16:43:11 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/16 21:38:05 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/24 12:57:16 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 
 # define ZOOM_FACTOR 20
 # define ROTATION_STEP 5
+# define TRANSLATION_STEP 10
 # define HEIGHT_STEP 0.1
 
 # define NOT_SET -42
@@ -70,6 +71,7 @@ typedef struct s_map_info
 	t_v3i	rotation;
 	t_v3i	translation;
 	float	scale;
+	int		scale_factor;
 	int		height_factor;
 	int		cols;
 	int		rows;
@@ -114,5 +116,10 @@ void		get_map_size(int fd, t_map_info *map);
 //		RENDER.C
 
 void	render_image(t_map_info *map);
+
+//		UTILS.C
+
+t_point		offset_point(t_point p, t_v3i offset);
+t_point		add_points(t_point p1, t_point p2);
 
 #endif
