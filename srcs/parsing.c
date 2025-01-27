@@ -6,67 +6,33 @@
 /*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 21:31:43 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/16 21:31:08 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/27 16:16:42 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static int	get_token_count(char *line)
+static void	set_cords(t_map_info *map, int idx, int i, char *inner_token)
 {
-	int		count;
-	char	*token;
-	char	*dup;
-	char	*saveptr;
-
-	count = 0;
-	if (!line || line[0] == '\n' || line[0] == '\0')
-		return (0);
-	dup = ft_strdup(line);
-	token = ft_strtok_r(dup, " ", &saveptr);
-	while (token)
-	{
-		token = ft_strtok_r(NULL, " ", &saveptr);
-		count++;
-	}
-	free(dup);
-	return (count);
+	map->map[idx][i].z_pos = ft_atoi(inner_token);
+	map->map[idx][i].x_pos = i;
+	map->map[idx][i].y_pos = idx;
+	if (map->map[idx][i].z_pos > map->max_height)
+		map->max_height = (int)map->map[idx][i].z_pos;
+	if (map->map[idx][i].z_pos < map->min_height)
+		map->min_height = (int)map->map[idx][i].z_pos;
 }
 
-static bool	is_number(char *str)
+static void	set_color(t_map_info *map, int idx, int i, char *inner_token)
 {
-	int	i;
-
-	i = 0;
-	while (str[i])
+	map->map[idx][i].color = NOT_SET;
+	if (inner_token)
 	{
-		if (str[i] == ',' && i != 0)
-			return (true);
-		if (!ft_isdigit(str[i]) && str[i] != '-')
-			return (false);
-		i++;
+		map->map[idx][i].color = get_hex(inner_token);
+		map->is_color = true;
 	}
-	return (true);
-}
-
-int	get_hex(char *str)
-{
-	int	result;
-	int	i;
-
-	result = 0;
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] >= '0' && str[i] <= '9')
-			result = (result << 4) | ((str[i] - '0') & 0xF);
-		else if (str[i] >= 'a' && str[i] <= 'f')
-			result = (result << 4) | ((str[i] - 'a' + 10) & 0xF);
-		else if (str[i] >= 'A' && str[i] <= 'F')
-			result = (result << 4) | ((str[i] - 'A' + 10) & 0xF);
-		i++;
-	}
-	return (result);
+	else
+		map->map[idx][i].color = 0xffffff;
 }
 
 static bool	load_row(t_map_info *map, int idx, int n, char *line)
@@ -84,21 +50,9 @@ static bool	load_row(t_map_info *map, int idx, int n, char *line)
 		inner_token = ft_strtok_r(token, ",", &inner_saveptr);
 		if (!is_number(inner_token))
 			return (false);
-		map->map[idx][i].z_pos = ft_atoi(inner_token);
-		map->map[idx][i].x_pos = i;
-		map->map[idx][i].y_pos = idx;
-		if (map->map[idx][i].z_pos > map->max_height)
-			map->max_height = (int)map->map[idx][i].z_pos;
-		if (map->map[idx][i].z_pos < map->min_height)
-			map->min_height = (int)map->map[idx][i].z_pos;
+		set_cords(map, idx, i, inner_token);
 		inner_token = ft_strtok_r(NULL, ",", &inner_saveptr);
-		if (inner_token)
-		{
-			map->map[idx][i].color = get_hex(inner_token);
-			map->is_color = true;
-		}
-		else
-			map->map[idx][i].color = 0xffffff;
+		set_color(map, idx, i, inner_token);
 		if (map->map[idx][i].color == NOT_SET)
 			return (false);
 		i++;

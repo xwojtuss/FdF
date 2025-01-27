@@ -6,7 +6,7 @@
 /*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 13:27:30 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/27 13:29:23 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/27 16:21:30 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ static bool	check_rotation(int keycode, t_map_info *map)
 		map->rotation.y += ROTATION_STEP;
 	else if (keycode == XK_a)
 		map->rotation.y -= ROTATION_STEP;
-	else if (keycode == XK_w)
-		map->rotation.x -= ROTATION_STEP;
 	else if (keycode == XK_s)
+		map->rotation.x -= ROTATION_STEP;
+	else if (keycode == XK_w)
 		map->rotation.x += ROTATION_STEP;
 	else if (keycode == XK_q)
 		map->rotation.z -= ROTATION_STEP;
