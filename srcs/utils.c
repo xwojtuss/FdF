@@ -1,12 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/27 13:46:07 by wkornato          #+#    #+#             */
+/*   Updated: 2025/01/27 13:48:01 by wkornato         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
-#include "vectors.h"
 
-t_point	add_points(t_point p1, t_point p2)
+void	copy_point(t_point srcs, t_point *dest)
 {
-	return ((t_point){p1.x_pos + p2.x_pos, p1.y_pos + p2.y_pos, p1.z_pos + p2.z_pos, p1.color});
-}
-
-t_point	offset_point(t_point p, t_v3i offset)
-{
-	return ((t_point){p.x_pos + offset.x, p.y_pos + offset.y, p.z_pos + offset.z, p.color});
+	dest->x_pos = srcs.x_pos;
+	dest->y_pos = srcs.y_pos;
+	dest->z_pos = srcs.z_pos;
+	dest->color = srcs.color;
 }

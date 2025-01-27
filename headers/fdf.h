@@ -6,7 +6,7 @@
 /*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 16:43:11 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/24 12:57:16 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/27 13:51:41 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 # endif
 
 # define ZOOM_FACTOR 20
-# define ROTATION_STEP 5
+# define ROTATION_STEP 5 * M_PI / 180.0
 # define TRANSLATION_STEP 10
 # define HEIGHT_STEP 0.1
 
@@ -68,7 +68,7 @@ typedef struct s_map_info
 {
 	t_mlx	screen;
 	t_point	**map;
-	t_v3i	rotation;
+	t_v3f	rotation;
 	t_v3i	translation;
 	float	scale;
 	int		scale_factor;
@@ -81,9 +81,10 @@ typedef struct s_map_info
 }			t_map_info;
 
 //	SRCS
-//		DEBUG.C
 
-void	copy_point(t_point source, t_point *dest);//temporary
+//		DRAW_LINE.C
+
+void	draw_line(t_point p0, t_point p1, t_map_info *map);
 
 //		ERRORS.C
 
@@ -96,6 +97,10 @@ void		err_map(char *message, t_map_info *map);
 //		FILES.C
 
 void		reopen_file(int *fd, char *filename, t_map_info *map);
+
+//		HOOKS.C
+
+int			key_hook(int keycode, t_map_info *map);
 
 //		MEMORY.C
 
@@ -115,11 +120,11 @@ void		get_map_size(int fd, t_map_info *map);
 
 //		RENDER.C
 
+void	calculate_point(t_point *p, t_map_info *map, t_point og);
 void	render_image(t_map_info *map);
 
 //		UTILS.C
 
-t_point		offset_point(t_point p, t_v3i offset);
-t_point		add_points(t_point p1, t_point p2);
+void	copy_point(t_point srcs, t_point *dest);
 
 #endif
