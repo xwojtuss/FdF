@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkornato <wkornato@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 21:31:46 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/12 21:52:38 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/27 13:43:44 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	perr_fd_free(char *message, int fd, char *to_free)
 	perror(message);
 	exit(EXIT_FAILURE);
 }
+
 void	err_fd(char *message, int fd)
 {
 	close(fd);

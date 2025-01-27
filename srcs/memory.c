@@ -6,7 +6,7 @@
 /*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 21:31:41 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/24 13:11:57 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/27 13:30:27 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,9 @@ void	init_map(t_map_info *map)
 	map->height_factor = 7;
 	map->scale_factor = 0;
 	map->scale = 1;
-	// map->rotation.x = 45;
-	// map->rotation.y = -35;
-	// map->rotation.z = 30;
-	map->rotation.x = 0;
-	map->rotation.y = 0;
-	map->rotation.z = 0;
+	map->rotation.x = 45 * M_PI / 180.0;
+	map->rotation.y = -35 * M_PI / 180.0;
+	map->rotation.z = 30 * M_PI / 180.0;
 	map->translation.x = 0;
 	map->translation.y = 0;
 	map->translation.z = 0;

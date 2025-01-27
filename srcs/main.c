@@ -6,7 +6,7 @@
 /*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 16:42:38 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/16 13:01:59 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/27 13:43:29 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 		return (ft_printf("Error\nInvalid argument count\n"), EXIT_FAILURE);
-	if (ft_strlen(argv[1]) < 4 || ft_strcmp(argv[1] + ft_strlen(argv[1]) - 4, ".fdf"))
+	if (ft_strlen(argv[1]) < 4 || ft_strcmp(argv[1] + ft_strlen(argv[1]) - 4,
+			".fdf"))
 		return (ft_printf("Error\nInvalid file extension\n"), EXIT_FAILURE);
 	fd = open(argv[1], O_RDONLY);
 	if (fd < 0)

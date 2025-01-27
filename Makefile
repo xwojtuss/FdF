@@ -12,7 +12,8 @@ LIBS = ${LIBFT} ${MINILIBX} -lm -lX11 -lXext
 
 NAME = fdf
 
-SRCS = main.c errors.c memory.c parsing.c files.c mlx.c render.c debug.c vectors.c utils.c
+SRCS = main.c errors.c memory.c parsing.c files.c mlx.c \
+	render.c vectors.c hooks.c draw_line.c utils.c
 
 MAPS = ${wildcard maps/*.fdf}
 
