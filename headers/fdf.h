@@ -6,7 +6,7 @@
 /*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 16:43:11 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/27 16:22:28 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/27 16:31:34 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,10 @@
 # define ROTATION_STEP 0.08726
 # define TRANSLATION_STEP 10
 # define HEIGHT_STEP 0.1
+
+# ifndef BONUS
+#  define BONUS 0
+# endif
 
 # define NOT_SET -42
 
