@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wkornato <wkornato@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 22:04:02 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/27 13:55:19 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/28 21:56:37 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	calculate_point(t_point *p, t_map_info *map, t_point og)
 	og.y_pos = (og.y_pos - map->rows / 2) * map->scale * 40;
 	og.z_pos = og.z_pos * ((float)map->height_factor * HEIGHT_STEP) * (2
 			+ map->scale * 3);
+	if (BONUS)
+		animate(&og, map);
 	temp.y_pos = og.y_pos * cos(map->rotation.x) - og.z_pos
 		* sin(map->rotation.x);
 	temp.z_pos = og.y_pos * sin(map->rotation.x) + og.z_pos
@@ -43,9 +45,9 @@ void	calculate_point(t_point *p, t_map_info *map, t_point og)
 void	display_point(int x, int y, t_map_info *map)
 {
 	if (!map->is_color && map->max_height != map->min_height)
-		map->map[y][x].color = 0xffffff * (1
-				- ((float)(map->map[y][x].z_pos - map->min_height)
-					/ (map->max_height - map->min_height) / 2) + 0.5);
+		map->map[y][x].color = 0xffffff * (1 - ((float)(map->map[y][x].z_pos
+						- map->min_height) / (map->max_height - map->min_height)
+					/ 2) + 0.5);
 	if (x != 0)
 		draw_line(map->map[y][x], map->map[y][x - 1], map);
 	if (y != 0)
@@ -60,9 +62,11 @@ void	render_normal(t_map_info *map)
 	x = 0;
 	while (x < map->cols)
 	{
+		map->anim.x = x;
 		y = 0;
 		while (y < map->rows)
 		{
+			map->anim.y = y;
 			display_point(x, y, map);
 			y++;
 		}
@@ -80,9 +84,11 @@ void	render_reverse(t_map_info *map)
 	x = map->cols - 1;
 	while (x >= 0)
 	{
+		map->anim.x = x;
 		y = map->rows - 1;
 		while (y >= 0)
 		{
+			map->anim.y = y;
 			display_point(x, y, map);
 			y--;
 		}
@@ -92,8 +98,10 @@ void	render_reverse(t_map_info *map)
 		map->screen.img.img, 0, 0);
 }
 
-void	render_image(t_map_info *map)
+int	render_image(t_map_info *map)
 {
+	ft_memset(map->screen.img.addr, '\0', W_HEIGHT
+		* map->screen.img.line_length);
 	if (map->cols > map->rows)
 		map->scale = W_HEIGHT / (map->cols * 40.0f + 40.0f) * (1
 				+ (float)map->scale_factor / 50);
@@ -105,4 +113,6 @@ void	render_image(t_map_info *map)
 		render_normal(map);
 	else
 		render_reverse(map);
+	map->anim.iter++;
+	return (EXIT_FAILURE);
 }

@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   hooks.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wkornato <wkornato@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 13:27:30 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/27 16:21:30 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/28 21:15:30 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include <X11/keysym.h>
 
-static void	clamp_rotation(t_map_info *map)
+void	clamp_rotation(t_map_info *map)
 {
 	if (map->rotation.x >= 2 * M_PI)
 		map->rotation.x -= 2 * M_PI;
