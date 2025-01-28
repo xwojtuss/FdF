@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wkornato <wkornato@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 16:43:11 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/27 16:31:34 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/28 21:57:47 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FDF_H
 # define FDF_H
 
+# include "animation.h"
 # include "libft.h"
 # include "vectors.h"
 # include <fcntl.h>
@@ -49,94 +50,102 @@
 
 typedef struct s_image
 {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}			t_image;
+	void		*img;
+	char		*addr;
+	int			bits_per_pixel;
+	int			line_length;
+	int			endian;
+}				t_image;
 
 typedef struct s_mlx
 {
-	void	*mlx;
-	void	*win;
-	int		w_height;
-	int		w_width;
-	t_image	img;
-}			t_mlx;
+	void		*mlx;
+	void		*win;
+	int			w_height;
+	int			w_width;
+	t_image		img;
+}				t_mlx;
 
 typedef struct s_point
 {
-	float	x_pos;
-	float	y_pos;
-	float	z_pos;
-	int		color;
-}			t_point;
+	float		x_pos;
+	float		y_pos;
+	float		z_pos;
+	int			color;
+}				t_point;
 
 typedef struct s_map_info
 {
-	t_mlx	screen;
-	t_point	**map;
-	t_v3f	rotation;
-	t_v3i	translation;
-	float	scale;
-	int		scale_factor;
-	int		height_factor;
-	int		cols;
-	int		rows;
-	int		min_height;
-	int		max_height;
-	bool	is_color;
-}			t_map_info;
+	t_mlx		screen;
+	t_point		**map;
+	t_v3f		rotation;
+	t_v3i		translation;
+	t_anim_info	anim;
+	float		scale;
+	int			scale_factor;
+	int			height_factor;
+	int			cols;
+	int			rows;
+	int			min_height;
+	int			max_height;
+	bool		is_color;
+}				t_map_info;
 
 //	SRCS
 
+//		ANIMATE_BONUS.C
+
+void			animate(t_point *p, t_map_info *map);
+void			get_anim_type(t_map_info *map, char *str);
+
 //		DRAW_LINE.C
 
-void		draw_line(t_point p0, t_point p1, t_map_info *map);
+void			draw_line(t_point p0, t_point p1, t_map_info *map);
 
 //		ERRORS.C
 
-void		perr_fd(char *message, int fd);
-void		perr_fd_free(char *message, int fd, char *to_free);
-void		err_fd(char *message, int fd);
-void		err_fd_free(char *message, int fd, char *to_free);
-void		err_map(char *message, t_map_info *map);
+void			perr_fd(char *message, int fd);
+void			perr_fd_free(char *message, int fd, char *to_free);
+void			err_fd(char *message, int fd);
+void			err_fd_free(char *message, int fd, char *to_free);
+void			err_map(char *message, t_map_info *map);
 
 //		FILES.C
 
-void		reopen_file(int *fd, char *filename, t_map_info *map);
+void			reopen_file(int *fd, char *filename, t_map_info *map);
 
 //		HOOKS.C
 
-int			key_hook(int keycode, t_map_info *map);
+void			clamp_rotation(t_map_info *map);
+int				key_hook(int keycode, t_map_info *map);
 
 //		MEMORY.C
 
-void		free_map(t_map_info *map);
-bool		alloc_map(t_map_info *map);
-void		init_map(t_map_info *map);
+void			free_map(t_map_info *map);
+bool			alloc_map(t_map_info *map);
+void			init_map(t_map_info *map);
 
 //		MLX.C
-void		my_mlx_pixel_put(t_map_info *map, int x, int y, int color);
-int			close_win(void *context, int exit_code);
-void		init_mlx(t_map_info *map);
+
+void			my_mlx_pixel_put(t_map_info *map, int x, int y, int color);
+int				close_win(void *context, int exit_code);
+void			init_mlx(t_map_info *map);
 
 //		PARSING.C
 
-void		load_map(int fd, t_map_info *map);
-void		get_map_size(int fd, t_map_info *map);
+void			load_map(int fd, t_map_info *map);
+void			get_map_size(int fd, t_map_info *map);
 
 //		RENDER.C
 
-void		calculate_point(t_point *p, t_map_info *map, t_point og);
-void		render_image(t_map_info *map);
+void			calculate_point(t_point *p, t_map_info *map, t_point og);
+int				render_image(t_map_info *map);
 
 //		UTILS.C
 
-void		copy_point(t_point srcs, t_point *dest);
-int			get_hex(char *str);
-bool		is_number(char *str);
-int			get_token_count(char *line);
+void			copy_point(t_point srcs, t_point *dest);
+int				get_hex(char *str);
+bool			is_number(char *str);
+int				get_token_count(char *line);
 
 #endif

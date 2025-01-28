@@ -1,8 +1,0 @@
-{
-	"files.associations": {
-		"fdf.h": "c",
-		"mlx.h": "c",
-		"cmath": "cpp",
-		"cstddef": "c"
-	}
-}

@@ -48,6 +48,8 @@
 .tmp_versions/
 modules.order
 Module.symvers
+valgrind.log
 Mkfile.old
+.vscode
 en.subject.pdf
 dkms.conf

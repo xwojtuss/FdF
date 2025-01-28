@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   memory.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkornato <wkornato@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wkornato <wkornato@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 21:31:41 by wkornato          #+#    #+#             */
-/*   Updated: 2025/01/27 13:30:27 by wkornato         ###   ########.fr       */
+/*   Updated: 2025/01/28 20:56:59 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,7 @@ void	init_map(t_map_info *map)
 	map->max_height = INT_MIN;
 	map->min_height = INT_MAX;
 	map->is_color = false;
+	map->anim.iter = 0;
+	map->anim.x = 0;
+	map->anim.y = 0;
 }
