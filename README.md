@@ -2,6 +2,8 @@
 
 FdF - a wireframe renderer using a parallel projection. It uses the miniLibX to render the image. You can create and display your own maps, animate and color them.
 
+You can use WSAD and QE to rotate the image, arrow keys to move the image, () signs to decrease or increase the height, + and - signs to zoom in and out.
+
 The scene is loaded via a file with the extention .fdf, the file consists of heights of points delimited by spaces, for example:
 ```
 0 0 0
